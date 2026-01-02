@@ -29,4 +29,10 @@ public class TaskController {
     public Task addTask(@RequestBody Task task) {
         return taskService.addTask(task.getTaskName(), task.getStatus(), task.getDeadline());
     }
+    
+    @DeleteMapping("/tasks/{id}")
+    public String deleteTask(@PathVariable long id) {
+        boolean removed = taskService.deleteTask(id);
+        return removed ? "Task deleted" : "Task not found";
+    }
 }

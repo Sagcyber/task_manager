@@ -30,4 +30,8 @@ public class TaskService {
                        .orElse(null);
     }
     
+    public boolean deleteTask(long id) {
+        return tasks.removeIf(task -> task.getId() == id);
+    }
+    
 }
