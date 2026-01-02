@@ -1,8 +1,10 @@
 package org.example.taskmanager.service;
 
 import org.example.taskmanager.model.Task;
+import org.example.taskmanager.model.TaskStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +17,17 @@ public class TaskService {
         return List.copyOf(tasks);
     }
     
-    public void addTask(Task task) {
-        if (task == null) {
-            throw new IllegalArgumentException("Task cannot be null");
-        }
+    public Task addTask(String taskName, TaskStatus status, LocalDate deadline) {
+        Task task = new Task(taskName, status, deadline);
         tasks.add(task);
+        return task;
     }
+    
+    public Task getTaskById(long id) {
+        return tasks.stream()
+                       .filter(task -> task.getId() == id)
+                       .findFirst()
+                       .orElse(null);
+    }
+    
 }
