@@ -1,5 +1,9 @@
 package org.example.taskmanager.model;
 
-public class Task {
+import java.time.LocalDate;
 
+public class Task {
+    private String taskName;
+    private TaskStatus status;
+    private LocalDate deadline;
 }
