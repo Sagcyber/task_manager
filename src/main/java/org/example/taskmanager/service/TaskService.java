@@ -36,7 +36,8 @@ public class TaskService {
         return taskRepository.findByCategory(category);
     }
     
-    public void deleteTask(Long id) {
+    public void deleteTask(long id) {
         taskRepository.deleteById(id);
     }
+    
 }
