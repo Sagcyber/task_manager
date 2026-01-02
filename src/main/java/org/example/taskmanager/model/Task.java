@@ -9,16 +9,18 @@ public class Task {
     private String taskName;
     private TaskStatus status;
     private LocalDate deadline;
+    private Category category;
     
     public Task(){
     
     }
     
-    public Task(String taskName, TaskStatus status, LocalDate deadline) {
+    public Task(String taskName, TaskStatus status, LocalDate deadline, Category category) {
         this.id = counter++;
         this.taskName = taskName;
         this.status = status;
         this.deadline = deadline;
+        this.category = category;
     }
     
     public long getId() {
@@ -47,6 +49,14 @@ public class Task {
     
     public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
+    }
+    
+    public Category getCategory() {
+        return category;
+    }
+    
+    public void setCategory(Category category) {
+        this.category = category;
     }
     
 }

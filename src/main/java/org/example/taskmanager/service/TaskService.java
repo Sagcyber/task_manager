@@ -1,5 +1,6 @@
 package org.example.taskmanager.service;
 
+import org.example.taskmanager.model.Category;
 import org.example.taskmanager.model.Task;
 import org.example.taskmanager.model.TaskStatus;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,8 @@ public class TaskService {
         return List.copyOf(tasks);
     }
     
-    public Task addTask(String taskName, TaskStatus status, LocalDate deadline) {
-        Task task = new Task(taskName, status, deadline);
+    public Task addTask(String taskName, TaskStatus status, LocalDate deadline, Category category) {
+        Task task = new Task(taskName, status, deadline, category);
         tasks.add(task);
         return task;
     }
@@ -34,4 +35,9 @@ public class TaskService {
         return tasks.removeIf(task -> task.getId() == id);
     }
     
+    public List<Task> getTasksByCategory(Category category) {
+        return tasks.stream()
+                       .filter(task -> task.getCategory() == category)
+                       .toList();
+    }
 }
