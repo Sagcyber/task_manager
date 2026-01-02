@@ -3,11 +3,13 @@ package org.example.taskmanager.controller;
 import org.example.taskmanager.model.Category;
 import org.example.taskmanager.model.Task;
 import org.example.taskmanager.service.TaskService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/tasks")
 public class TaskController {
     
     private final TaskService taskService;
@@ -16,29 +18,32 @@ public class TaskController {
         this.taskService = taskService;
     }
     
-    @GetMapping("/tasks")
+    @GetMapping
     public List<Task> getAllTasks() {
         return taskService.getAllTasks();
     }
     
-    @GetMapping("/tasks/{id}")
-    public Task getTaskById(@PathVariable long id) {
-        return taskService.getTaskById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
+        return taskService.getTaskById(id)
+                       .map(ResponseEntity::ok)
+                       .orElse(ResponseEntity.notFound().build());
     }
     
-    @PostMapping("/tasks")
+    @PostMapping
     public Task addTask(@RequestBody Task task) {
-        return taskService.addTask(task.getTaskName(), task.getStatus(), task.getDeadline(), task.getCategory());
+        return taskService.addTask(task);
     }
     
-    @DeleteMapping("/tasks/{id}")
-    public String deleteTask(@PathVariable long id) {
-        boolean removed = taskService.deleteTask(id);
-        return removed ? "Task deleted" : "Task not found";
-    }
-    
-    @GetMapping("/tasks/category/{category}")
+    @GetMapping("/category/{category}")
     public List<Task> getTasksByCategory(@PathVariable Category category) {
         return taskService.getTasksByCategory(category);
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        taskService.deleteTask(id);
+        return ResponseEntity.noContent()
+                             .build();
     }
 }

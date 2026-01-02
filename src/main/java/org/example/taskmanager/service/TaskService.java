@@ -3,41 +3,40 @@ package org.example.taskmanager.service;
 import org.example.taskmanager.model.Category;
 import org.example.taskmanager.model.Task;
 import org.example.taskmanager.model.TaskStatus;
+import org.example.taskmanager.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TaskService {
     
-    private final List<Task> tasks = new ArrayList<>();
+    private final TaskRepository taskRepository;
+    
+    public TaskService(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
     
     public List<Task> getAllTasks() {
-        return List.copyOf(tasks);
+        return taskRepository.findAll();
     }
     
-    public Task addTask(String taskName, TaskStatus status, LocalDate deadline, Category category) {
-        Task task = new Task(taskName, status, deadline, category);
-        tasks.add(task);
-        return task;
+    public Task addTask(Task task) {
+        return taskRepository.save(task);
     }
     
-    public Task getTaskById(long id) {
-        return tasks.stream()
-                       .filter(task -> task.getId() == id)
-                       .findFirst()
-                       .orElse(null);
-    }
-    
-    public boolean deleteTask(long id) {
-        return tasks.removeIf(task -> task.getId() == id);
+    public Optional<Task> getTaskById(Long id) {
+        return taskRepository.findById(id);
     }
     
     public List<Task> getTasksByCategory(Category category) {
-        return tasks.stream()
-                       .filter(task -> task.getCategory() == category)
-                       .toList();
+        return taskRepository.findByCategory(category);
+    }
+    
+    public void deleteTask(Long id) {
+        taskRepository.deleteById(id);
     }
 }

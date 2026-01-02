@@ -1,14 +1,25 @@
 package org.example.taskmanager.model;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "tasks")
 public class Task {
     
-    private static long counter = 1;
-    private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
     private String taskName;
+    
+    @Enumerated(EnumType.STRING)
     private TaskStatus status;
+    
     private LocalDate deadline;
+    
+    @Enumerated(EnumType.STRING)
     private Category category;
     
     public Task(){
@@ -16,7 +27,6 @@ public class Task {
     }
     
     public Task(String taskName, TaskStatus status, LocalDate deadline, Category category) {
-        this.id = counter++;
         this.taskName = taskName;
         this.status = status;
         this.deadline = deadline;
