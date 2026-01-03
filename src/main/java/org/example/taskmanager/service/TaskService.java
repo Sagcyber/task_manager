@@ -32,6 +32,22 @@ public class TaskService {
         return taskRepository.findByCategory_Name(name);
     }
     
+    public Optional<Task> updateTask(Long id, Task updatedTask) {
+        Optional<Task> optionalTask = taskRepository.findById(id);
+        
+        if (optionalTask.isPresent()) {
+            Task existingTask = optionalTask.get();
+            existingTask.setTaskName(updatedTask.getTaskName());
+            existingTask.setStatus(updatedTask.getStatus());
+            existingTask.setDeadline(updatedTask.getDeadline());
+            existingTask.setCategory(updatedTask.getCategory());
+            taskRepository.save(existingTask);
+            return Optional.of(existingTask);
+        }
+        
+        return Optional.empty();
+    }
+    
     public void deleteTask(long id) {
         taskRepository.deleteById(id);
     }
