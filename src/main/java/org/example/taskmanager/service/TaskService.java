@@ -1,13 +1,9 @@
 package org.example.taskmanager.service;
 
-import org.example.taskmanager.model.Category;
 import org.example.taskmanager.model.Task;
-import org.example.taskmanager.model.TaskStatus;
 import org.example.taskmanager.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +28,7 @@ public class TaskService {
         return taskRepository.findById(id);
     }
     
-    public List<Task> getTasksByCategory(Category category) {
+    public List<Task> getTasksByCategory(DELETE category) {
         return taskRepository.findByCategory(category);
     }
     

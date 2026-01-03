@@ -20,13 +20,13 @@ public class Task {
     private LocalDate deadline;
     
     @Enumerated(EnumType.STRING)
-    private Category category;
+    private DELETE category;
     
     public Task(){
     
     }
     
-    public Task(String taskName, TaskStatus status, LocalDate deadline, Category category) {
+    public Task(String taskName, TaskStatus status, LocalDate deadline, DELETE category) {
         this.taskName = taskName;
         this.status = status;
         this.deadline = deadline;
@@ -61,11 +61,11 @@ public class Task {
         this.deadline = deadline;
     }
     
-    public Category getCategory() {
+    public DELETE getCategory() {
         return category;
     }
     
-    public void setCategory(Category category) {
+    public void setCategory(DELETE category) {
         this.category = category;
     }
     

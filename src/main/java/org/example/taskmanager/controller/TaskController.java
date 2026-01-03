@@ -1,6 +1,5 @@
 package org.example.taskmanager.controller;
 
-import org.example.taskmanager.model.Category;
 import org.example.taskmanager.model.Task;
 import org.example.taskmanager.service.TaskService;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +35,7 @@ public class TaskController {
     }
     
     @GetMapping("/category/{category}")
-    public List<Task> getTasksByCategory(@PathVariable Category category) {
+    public List<Task> getTasksByCategory(@PathVariable DELETE category) {
         return taskService.getTasksByCategory(category);
     }
     
