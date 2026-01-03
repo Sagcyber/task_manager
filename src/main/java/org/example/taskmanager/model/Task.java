@@ -19,14 +19,15 @@ public class Task {
     
     private LocalDate deadline;
     
-    @Enumerated(EnumType.STRING)
-    private DELETE category;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
     
     public Task(){
     
     }
     
-    public Task(String taskName, TaskStatus status, LocalDate deadline, DELETE category) {
+    public Task(String taskName, TaskStatus status, LocalDate deadline, Category category) {
         this.taskName = taskName;
         this.status = status;
         this.deadline = deadline;
@@ -61,11 +62,11 @@ public class Task {
         this.deadline = deadline;
     }
     
-    public DELETE getCategory() {
+    public Category getCategory() {
         return category;
     }
     
-    public void setCategory(DELETE category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
     
