@@ -34,9 +34,9 @@ public class TaskController {
         return taskService.addTask(task);
     }
     
-    @GetMapping("/category/{category}")
-    public List<Task> getTasksByCategory(@PathVariable DELETE category) {
-        return taskService.getTasksByCategory(category);
+    @GetMapping("/category/{name}")
+    public List<Task> getTasksByCategory(@PathVariable  String name) {
+        return taskService.getTasksByCategory(name);
     }
     
     @DeleteMapping("/{id}")

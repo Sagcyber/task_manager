@@ -28,8 +28,8 @@ public class TaskService {
         return taskRepository.findById(id);
     }
     
-    public List<Task> getTasksByCategory(DELETE category) {
-        return taskRepository.findByCategory(category);
+    public List<Task> getTasksByCategory(String name) {
+        return taskRepository.findByCategory_Name(name);
     }
     
     public void deleteTask(long id) {
