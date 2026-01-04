@@ -2,6 +2,9 @@ package org.example.taskmanager.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "categories")
 public class Category {
@@ -10,10 +13,13 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @Column(nullable = false, unique = true)
     private String name;
     
-    public Category() {
+    @OneToMany(mappedBy = "category")
+    private List<Task> tasks = new ArrayList<>();
     
+    public Category() {
     }
     
     public Category(String name) {
@@ -28,8 +34,11 @@ public class Category {
         return name;
     }
     
+    public List<Task> getTasks() {
+        return tasks;
+    }
+    
     public void setName(String name) {
         this.name = name;
     }
-    
 }

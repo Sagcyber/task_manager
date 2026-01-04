@@ -12,6 +12,7 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @Column(nullable = false)
     private String taskName;
     
     @Enumerated(EnumType.STRING)
@@ -20,11 +21,10 @@ public class Task {
     private LocalDate deadline;
     
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
     
-    public Task(){
-    
+    public Task() {
     }
     
     public Task(String taskName, TaskStatus status, LocalDate deadline, Category category) {
@@ -34,7 +34,7 @@ public class Task {
         this.category = category;
     }
     
-    public long getId() {
+    public Long getId() {
         return id;
     }
     
@@ -42,32 +42,31 @@ public class Task {
         return taskName;
     }
     
-    public void setTaskName(String taskName) {
-        this.taskName = taskName;
-    }
-    
     public TaskStatus getStatus() {
         return status;
-    }
-    
-    public void setStatus(TaskStatus status) {
-        this.status = status;
     }
     
     public LocalDate getDeadline() {
         return deadline;
     }
     
-    public void setDeadline(LocalDate deadline) {
-        this.deadline = deadline;
-    }
-    
     public Category getCategory() {
         return category;
+    }
+    
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
+    
+    public void setStatus(TaskStatus status) {
+        this.status = status;
+    }
+    
+    public void setDeadline(LocalDate deadline) {
+        this.deadline = deadline;
     }
     
     public void setCategory(Category category) {
         this.category = category;
     }
-    
 }
