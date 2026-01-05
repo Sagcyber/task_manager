@@ -10,6 +10,7 @@ import org.example.taskmanager.model.Category;
 import org.example.taskmanager.model.Task;
 import org.example.taskmanager.repository.CategoryRepository;
 import org.example.taskmanager.repository.TaskRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class TaskService {
         this.categoryRepository = categoryRepository;
     }
     
+    @Cacheable("tasks")
     public List<TaskResponseDto> getAllTasks() {
         return taskRepository.findAll()
                        .stream()
