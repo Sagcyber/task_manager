@@ -1,5 +1,6 @@
 package org.example.taskmanager.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.taskmanager.dto.TaskRequestDto;
 import org.example.taskmanager.dto.TaskResponseDto;
 import org.example.taskmanager.exception.CategoryNotFoundException;
@@ -12,8 +13,8 @@ import org.example.taskmanager.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
+@Slf4j
 @Service
 public class TaskService {
     
@@ -38,13 +39,21 @@ public class TaskService {
     }
     
     public TaskResponseDto addTask(TaskRequestDto dto) {
+        log.info("Creating task: name={}, category={}",
+                 dto.getTaskName(),
+                 dto.getCategoryName());
+        
         Category category = categoryRepository.findAll().stream()
                                               .filter(c -> c.getName().equals(dto.getCategoryName()))
                                               .findFirst()
-                                              .orElseThrow(() -> new CategoryNotFoundException(dto.getCategoryName()));
+                                              .orElseThrow(() ->
+                                                                   new CategoryNotFoundException(dto.getCategoryName()));
         
         Task task = taskMapper.toEntity(dto, category);
         Task savedTask = taskRepository.save(task);
+        
+        log.info("Task created successfully with id={}",
+                 savedTask.getId());
         
         return taskMapper.toDto(savedTask);
     }
@@ -70,7 +79,8 @@ public class TaskService {
         Category category = categoryRepository.findAll().stream()
                                               .filter(c -> c.getName().equals(dto.getCategoryName()))
                                               .findFirst()
-                                              .orElseThrow(() -> new CategoryNotFoundException(dto.getCategoryName()));
+                                              .orElseThrow(() ->
+                                                                   new CategoryNotFoundException(dto.getCategoryName()));
         
         task.setTaskName(dto.getTaskName());
         task.setStatus(dto.getStatus());
@@ -81,6 +91,7 @@ public class TaskService {
     }
     
     public void deleteTask(long id) {
+        log.info("Deleting task with id={}", id);
         taskRepository.deleteById(id);
     }
     
