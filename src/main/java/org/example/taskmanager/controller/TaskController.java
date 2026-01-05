@@ -2,7 +2,6 @@ package org.example.taskmanager.controller;
 
 import org.example.taskmanager.dto.TaskRequestDto;
 import org.example.taskmanager.dto.TaskResponseDto;
-import org.example.taskmanager.model.Task;
 import org.example.taskmanager.service.TaskService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +24,7 @@ public class TaskController {
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
+    public ResponseEntity<TaskResponseDto> getTaskById(@PathVariable Long id) {
         return ResponseEntity.ok(taskService.getTaskById(id));
     }
     

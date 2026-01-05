@@ -2,6 +2,7 @@ package org.example.taskmanager.service;
 
 import org.example.taskmanager.dto.TaskRequestDto;
 import org.example.taskmanager.dto.TaskResponseDto;
+import org.example.taskmanager.exception.CategoryNotFoundException;
 import org.example.taskmanager.exception.TaskNotFoundException;
 import org.example.taskmanager.mapper.TaskMapper;
 import org.example.taskmanager.model.Category;
@@ -29,7 +30,7 @@ public class TaskService {
         this.categoryRepository = categoryRepository;
     }
     
-    public List<Task> getAllTasks() {
+    public List<TaskResponseDto> getAllTasks() {
         return taskRepository.findAll()
                        .stream()
                        .map(taskMapper::toDto)
