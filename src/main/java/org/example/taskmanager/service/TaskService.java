@@ -2,6 +2,7 @@ package org.example.taskmanager.service;
 
 import org.example.taskmanager.dto.TaskRequestDto;
 import org.example.taskmanager.dto.TaskResponseDto;
+import org.example.taskmanager.exception.TaskNotFoundException;
 import org.example.taskmanager.mapper.TaskMapper;
 import org.example.taskmanager.model.Category;
 import org.example.taskmanager.model.Task;
@@ -37,9 +38,9 @@ public class TaskService {
     
     public TaskResponseDto addTask(TaskRequestDto dto) {
         Category category = categoryRepository.findAll().stream()
-                                    .filter(c -> c.getName().equals(dto.getCategoryName()))
-                                    .findFirst()
-                                    .orElseThrow();
+                                              .filter(c -> c.getName().equals(dto.getCategoryName()))
+                                              .findFirst()
+                                              .orElseThrow(() -> new CategoryNotFoundException(dto.getCategoryName()));
         
         Task task = taskMapper.toEntity(dto, category);
         Task savedTask = taskRepository.save(task);
@@ -49,7 +50,7 @@ public class TaskService {
     
     public TaskResponseDto getTaskById(Long id) {
         Task task = taskRepository.findById(id)
-                            .orElseThrow();
+                                  .orElseThrow(() -> new TaskNotFoundException(id));
         
         return taskMapper.toDto(task);
     }
@@ -66,9 +67,9 @@ public class TaskService {
                             .orElseThrow();
         
         Category category = categoryRepository.findAll().stream()
-                                    .filter(c -> c.getName().equals(dto.getCategoryName()))
-                                    .findFirst()
-                                    .orElseThrow();
+                                              .filter(c -> c.getName().equals(dto.getCategoryName()))
+                                              .findFirst()
+                                              .orElseThrow(() -> new CategoryNotFoundException(dto.getCategoryName()));
         
         task.setTaskName(dto.getTaskName());
         task.setStatus(dto.getStatus());
