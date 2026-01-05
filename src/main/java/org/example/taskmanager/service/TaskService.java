@@ -83,6 +83,7 @@ public class TaskService {
                        .toList();
     }
     
+    @Cacheable(value = "tasksByStatus", key = "#status")
     public List<TaskResponseDto> getTasksByStatus(TaskStatus status) {
         return taskRepository.findByStatus(status)
                              .stream()
