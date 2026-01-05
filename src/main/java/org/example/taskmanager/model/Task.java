@@ -20,7 +20,7 @@ public class Task {
     
     private LocalDate deadline;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
     

@@ -21,7 +21,11 @@ public class TaskMapper {
         dto.setTaskName(task.getTaskName());
         dto.setStatus(task.getStatus());
         dto.setDeadline(task.getDeadline());
-        dto.setCategoryName(task.getCategory().getName());
+        
+        if (task.getCategory() != null) {
+            dto.setCategoryName(task.getCategory().getName());
+        }
+        
         return dto;
     }
 }
