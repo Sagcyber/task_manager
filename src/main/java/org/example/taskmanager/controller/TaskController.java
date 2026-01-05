@@ -2,6 +2,7 @@ package org.example.taskmanager.controller;
 
 import org.example.taskmanager.dto.TaskRequestDto;
 import org.example.taskmanager.dto.TaskResponseDto;
+import org.example.taskmanager.model.TaskStatus;
 import org.example.taskmanager.service.TaskService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,11 @@ public class TaskController {
         return taskService.addTask(dto);
     }
     
+    @GetMapping("/status/{status}")
+    public List<TaskResponseDto> getTasksByStatus(@PathVariable
+                                                  TaskStatus status) {
+        return taskService.getTasksByStatus(status);
+    }
     
     @GetMapping("/category/{name}")
     public List<TaskResponseDto> getTasksByCategory(@PathVariable  String name) {

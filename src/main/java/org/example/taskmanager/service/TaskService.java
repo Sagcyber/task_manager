@@ -11,6 +11,7 @@ import org.example.taskmanager.exception.TaskNotFoundException;
 import org.example.taskmanager.mapper.TaskMapper;
 import org.example.taskmanager.model.Category;
 import org.example.taskmanager.model.Task;
+import org.example.taskmanager.model.TaskStatus;
 import org.example.taskmanager.model.User;
 import org.example.taskmanager.repository.CategoryRepository;
 import org.example.taskmanager.repository.TaskRepository;
@@ -80,6 +81,13 @@ public class TaskService {
                        .stream()
                        .map(taskMapper::toDto)
                        .toList();
+    }
+    
+    public List<TaskResponseDto> getTasksByStatus(TaskStatus status) {
+        return taskRepository.findByStatus(status)
+                             .stream()
+                             .map(taskMapper::toDto)
+                             .toList();
     }
     
     public TaskResponseDto updateTask(Long id, TaskRequestDto dto) {
