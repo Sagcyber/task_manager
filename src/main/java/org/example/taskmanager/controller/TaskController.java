@@ -1,5 +1,7 @@
 package org.example.taskmanager.controller;
 
+import org.example.taskmanager.dto.TaskRequestDto;
+import org.example.taskmanager.dto.TaskResponseDto;
 import org.example.taskmanager.model.Task;
 import org.example.taskmanager.service.TaskService;
 import org.springframework.http.ResponseEntity;
@@ -18,32 +20,30 @@ public class TaskController {
     }
     
     @GetMapping
-    public List<Task> getAllTasks() {
+    public List<TaskResponseDto> getAllTasks() {
         return taskService.getAllTasks();
     }
     
     @GetMapping("/{id}")
     public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
-        return taskService.getTaskById(id)
-                       .map(ResponseEntity::ok)
-                       .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(taskService.getTaskById(id));
     }
     
     @PostMapping
-    public Task addTask(@RequestBody Task task) {
-        return taskService.addTask(task);
+    public TaskResponseDto addTask(@RequestBody
+                                   TaskRequestDto dto) {
+        return taskService.addTask(dto);
     }
     
+    
     @GetMapping("/category/{name}")
-    public List<Task> getTasksByCategory(@PathVariable  String name) {
+    public List<TaskResponseDto> getTasksByCategory(@PathVariable  String name) {
         return taskService.getTasksByCategory(name);
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task task) {
-        return taskService.updateTask(id, task)
-                       .map(ResponseEntity::ok)
-                       .orElse(ResponseEntity.notFound().build());
+    public TaskResponseDto updateTask(@PathVariable Long id, @RequestBody TaskRequestDto dto) {
+        return taskService.updateTask(id, dto);
     }
     
     @DeleteMapping("/{id}")
