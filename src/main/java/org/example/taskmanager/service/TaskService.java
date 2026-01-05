@@ -1,5 +1,8 @@
 package org.example.taskmanager.service;
 
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.extern.slf4j.Slf4j;
 import org.example.taskmanager.dto.TaskRequestDto;
 import org.example.taskmanager.dto.TaskResponseDto;
@@ -8,6 +11,7 @@ import org.example.taskmanager.exception.TaskNotFoundException;
 import org.example.taskmanager.mapper.TaskMapper;
 import org.example.taskmanager.model.Category;
 import org.example.taskmanager.model.Task;
+import org.example.taskmanager.model.User;
 import org.example.taskmanager.repository.CategoryRepository;
 import org.example.taskmanager.repository.TaskRepository;
 import org.springframework.cache.annotation.Cacheable;
@@ -18,6 +22,10 @@ import java.util.List;
 @Slf4j
 @Service
 public class TaskService {
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
     
     private final TaskRepository taskRepository;
     

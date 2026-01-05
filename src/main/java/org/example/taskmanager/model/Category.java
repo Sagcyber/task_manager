@@ -1,6 +1,7 @@
 package org.example.taskmanager.model;
 
 import jakarta.persistence.*;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @Setter
     @Column(nullable = false, unique = true)
     private String name;
     
@@ -38,7 +40,4 @@ public class Category {
         return tasks;
     }
     
-    public void setName(String name) {
-        this.name = name;
-    }
 }

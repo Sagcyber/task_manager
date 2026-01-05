@@ -1,6 +1,7 @@
 package org.example.taskmanager.model;
 
 import jakarta.persistence.*;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
@@ -12,14 +13,18 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @Setter
     @Column(nullable = false)
     private String taskName;
     
+    @Setter
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
     
+    @Setter
     private LocalDate deadline;
     
+    @Setter
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
@@ -54,19 +59,4 @@ public class Task {
         return category;
     }
     
-    public void setTaskName(String taskName) {
-        this.taskName = taskName;
-    }
-    
-    public void setStatus(TaskStatus status) {
-        this.status = status;
-    }
-    
-    public void setDeadline(LocalDate deadline) {
-        this.deadline = deadline;
-    }
-    
-    public void setCategory(Category category) {
-        this.category = category;
-    }
 }

@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/001-create-categories.yaml
   - include:
       file: db/changelog/002-create-tasks.yaml
+  - include:
+      file: db/changelog/003-create-users.yaml
