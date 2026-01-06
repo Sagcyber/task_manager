@@ -1,29 +1,35 @@
 package org.example.taskmanager.exception;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
     
     @ExceptionHandler(TaskNotFoundException.class)
-    public ResponseEntity<String> handleTaskNotFound(TaskNotFoundException ex) {
-        log.error("Task not found error: {}", ex.getMessage());
+    public ResponseEntity<ApiErrorResponse> handleTaskNotFound(TaskNotFoundException ex) {
         return ResponseEntity
                        .status(HttpStatus.NOT_FOUND)
-                       .body(ex.getMessage());
+                       .body(new ApiErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND.value()));
     }
     
     @ExceptionHandler(CategoryNotFoundException.class)
-    public ResponseEntity<String> handleCategoryNotFound(CategoryNotFoundException ex) {
-        log.error("Category not found error: {}", ex.getMessage());
+    public ResponseEntity<ApiErrorResponse> handleCategoryNotFound(CategoryNotFoundException ex) {
         return ResponseEntity
                        .status(HttpStatus.NOT_FOUND)
-                       .body(ex.getMessage());
+                       .body(new ApiErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND.value()));
+    }
+    
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiErrorResponse> handleGenericException(Exception ex) {
+        return ResponseEntity
+                       .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                       .body(new ApiErrorResponse(
+                               "Unexpected error occurred",
+                               HttpStatus.INTERNAL_SERVER_ERROR.value()
+                       ));
     }
     
 }
