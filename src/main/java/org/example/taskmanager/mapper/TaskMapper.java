@@ -4,8 +4,11 @@ import org.example.taskmanager.dto.TaskRequestDto;
 import org.example.taskmanager.dto.TaskResponseDto;
 import org.example.taskmanager.model.Category;
 import org.example.taskmanager.model.Task;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TaskMapper {
+    
     public Task toEntity(TaskRequestDto dto, Category category) {
         Task task = new Task();
         task.setTaskName(dto.getTaskName());
@@ -21,11 +24,7 @@ public class TaskMapper {
         dto.setTaskName(task.getTaskName());
         dto.setStatus(task.getStatus());
         dto.setDeadline(task.getDeadline());
-        
-        if (task.getCategory() != null) {
-            dto.setCategoryName(task.getCategory().getName());
-        }
-        
+        dto.setCategoryName(task.getCategory().getName());
         return dto;
     }
 }

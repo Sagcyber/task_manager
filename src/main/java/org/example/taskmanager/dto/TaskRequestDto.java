@@ -7,9 +7,9 @@ import java.time.LocalDate;
 public class TaskRequestDto {
     
     private String taskName;
+    private String categoryName;
     private TaskStatus status;
     private LocalDate deadline;
-    private String categoryName;
     
     public String getTaskName() {
         return taskName;
@@ -17,6 +17,14 @@ public class TaskRequestDto {
     
     public void setTaskName(String taskName) {
         this.taskName = taskName;
+    }
+    
+    public String getCategoryName() {
+        return categoryName;
+    }
+    
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
     
     public TaskStatus getStatus() {
@@ -33,14 +41,6 @@ public class TaskRequestDto {
     
     public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
-    }
-    
-    public String getCategoryName() {
-        return categoryName;
-    }
-    
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
     }
     
 }

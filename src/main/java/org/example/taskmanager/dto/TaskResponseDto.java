@@ -5,19 +5,12 @@ import org.example.taskmanager.model.TaskStatus;
 import java.time.LocalDate;
 
 public class TaskResponseDto {
+    
     private Long id;
     private String taskName;
     private TaskStatus status;
     private LocalDate deadline;
     private String categoryName;
-    
-    public String getTaskName() {
-        return taskName;
-    }
-    
-    public void setTaskName(String taskName) {
-        this.taskName = taskName;
-    }
     
     public Long getId() {
         return id;
@@ -25,6 +18,14 @@ public class TaskResponseDto {
     
     public void setId(Long id) {
         this.id = id;
+    }
+    
+    public String getTaskName() {
+        return taskName;
+    }
+    
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
     }
     
     public TaskStatus getStatus() {
