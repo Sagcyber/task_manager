@@ -46,12 +46,10 @@ public class TaskService {
                  dto.getTaskName(),
                  dto.getCategoryName());
         
-        Category category = categoryRepository.findAll().stream()
-                                              .filter(c -> c.getName().equals(dto.getCategoryName()))
-                                              .findFirst()
-                                              .orElseThrow(() ->
-                                                                   new CategoryNotFoundException(dto.getCategoryName()));
-        
+        Category category = categoryRepository.findByName(dto.getCategoryName())
+                                    .orElseThrow(() ->
+                                                         new CategoryNotFoundException(dto.getCategoryName()));
+                                    
         Task task = taskMapper.toEntity(dto, category);
         Task savedTask = taskRepository.save(task);
         
@@ -87,9 +85,7 @@ public class TaskService {
         Task task = taskRepository.findById(id)
                             .orElseThrow();
         
-        Category category = categoryRepository.findAll().stream()
-                                              .filter(c -> c.getName().equals(dto.getCategoryName()))
-                                              .findFirst()
+        Category category = categoryRepository.findByName(dto.getCategoryName())
                                               .orElseThrow(() ->
                                                                    new CategoryNotFoundException(dto.getCategoryName()));
         
