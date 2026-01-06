@@ -3,7 +3,9 @@ package org.example.taskmanager.mapper;
 import org.example.taskmanager.dto.CategoryRequestDto;
 import org.example.taskmanager.dto.CategoryResponseDto;
 import org.example.taskmanager.model.Category;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CategoryMapper {
     
     public Category toEntity(CategoryRequestDto dto) {
