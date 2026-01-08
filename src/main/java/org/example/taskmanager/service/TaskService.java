@@ -41,7 +41,9 @@ public class TaskService {
                              .toList();
     }
     
+    @Cacheable(value = "taskById", key = "#id")
     public TaskResponseDto getTaskById(Long id) {
+        log.info("Fetching task from DB, id={}", id);
         Task task = taskRepository.findById(id)
                                   .orElseThrow(() -> new TaskNotFoundException(id));
         
@@ -63,7 +65,7 @@ public class TaskService {
                              .toList();
     }
     
-    @CacheEvict(value = {"tasks", "tasksByStatus"}, allEntries = true)
+    @CacheEvict(value = {"tasks", "tasksByStatus", "taskById"}, allEntries = true)
     public TaskResponseDto addTask(TaskRequestDto dto) {
         log.info("Creating task: name={}, category={}",
                  dto.getTaskName(),
@@ -80,7 +82,7 @@ public class TaskService {
         return taskMapper.toDto(savedTask);
     }
     
-    @CacheEvict(value = {"tasks", "tasksByStatus"}, allEntries = true)
+    @CacheEvict(value = {"tasks", "tasksByStatus", "taskById"}, allEntries = true)
     public TaskResponseDto updateTask(Long id, TaskRequestDto dto) {
         Task task = taskRepository.findById(id)
                                   .orElseThrow(() -> new TaskNotFoundException(id));
@@ -96,7 +98,7 @@ public class TaskService {
         return taskMapper.toDto(taskRepository.save(task));
     }
     
-    @CacheEvict(value = {"tasks", "tasksByStatus"}, allEntries = true)
+    @CacheEvict(value = {"tasks", "tasksByStatus", "taskById"}, allEntries = true)
     public void deleteTask(Long id) {
         log.info("Deleting task with id={}", id);
         
