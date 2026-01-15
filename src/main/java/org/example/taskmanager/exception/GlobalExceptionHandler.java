@@ -33,4 +33,10 @@ public class GlobalExceptionHandler {
                        ));
     }
     
+    @ExceptionHandler(CategoryAlreadyExistsException.class)
+    public ResponseEntity<ApiErrorResponse> handleCategoryExists(CategoryAlreadyExistsException ex) {
+        return ResponseEntity
+                       .status(HttpStatus.CONFLICT)
+                       .body(new ApiErrorResponse(ex.getMessage(), HttpStatus.CONFLICT.value()));
+    }
 }

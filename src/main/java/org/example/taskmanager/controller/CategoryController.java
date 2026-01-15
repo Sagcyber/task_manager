@@ -31,4 +31,21 @@ public class CategoryController {
     public List<CategoryResponseDto> getAll() {
         return categoryService.findAll();
     }
+    
+    @Operation(summary = "Get category by id")
+    @GetMapping("/{id}")
+    public CategoryResponseDto getById(@PathVariable Long id) {
+        return categoryService.getById(id);
+    }
+    
+    @Operation(summary = "Update category")
+    @PutMapping("/{id}")
+    public CategoryResponseDto update(@PathVariable Long id, @RequestBody CategoryRequestDto dto) {
+        return categoryService.update(id, dto);
+    }
+    
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        categoryService.delete(id);
+    }
 }
