@@ -1,14 +1,20 @@
 package org.example.taskmanager.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.taskmanager.dto.UserRequestDto;
 import org.example.taskmanager.dto.UserResponseDto;
+import org.example.taskmanager.exception.UserAlreadyExistsException;
+import org.example.taskmanager.exception.UserNotFoundException;
 import org.example.taskmanager.mapper.UserMapper;
 import org.example.taskmanager.model.User;
 import org.example.taskmanager.repository.UserRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class UserService {
     
@@ -21,15 +27,56 @@ public class UserService {
         this.userMapper = userMapper;
     }
     
+    @CacheEvict(value = {"users", "userById"}, allEntries = true)
     public UserResponseDto createUser(UserRequestDto dto) {
+        log.info("Creating user: name={}", dto.getUsername());
+        
+        if (userRepository.existsByUsername(dto.getUsername())) {
+            throw new UserAlreadyExistsException(dto.getUsername());
+        }
+        
         User user = userMapper.toEntity(dto);
         return userMapper.toDto(userRepository.save(user));
     }
     
+    @Cacheable("users")
     public List<UserResponseDto> getAllUsers() {
         return userRepository.findAll()
                        .stream()
                        .map(userMapper::toDto)
                        .toList();
+    }
+    
+    @Cacheable(value = "userById", key = "#id")
+    public UserResponseDto getById(Long id) {
+        log.info("Fetching user from DB, id={}", id);
+        User user = userRepository.findById(id)
+                                  .orElseThrow(() -> new UserNotFoundException(id));
+        
+        return userMapper.toDto(user);
+    }
+    
+    @CacheEvict(value = {"users", "userById"}, allEntries = true)
+    public UserResponseDto update(Long id, UserRequestDto dto) {
+        User user = userRepository.findById(id)
+                                  .orElseThrow(() -> new UserNotFoundException(id));
+        
+        if (!user.getUsername().equals(dto.getUsername())
+                    && userRepository.existsByUsername(dto.getUsername())) {
+            throw new UserAlreadyExistsException(dto.getUsername());
+        }
+        
+        user.setUsername(dto.getUsername());
+        return userMapper.toDto(userRepository.save(user));
+    }
+    
+    @CacheEvict(value = {"users", "userById"}, allEntries = true)
+    public void delete(Long id) {
+        log.info("Deleting user with id={}", id);
+        
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundException(id);
+        }
+        userRepository.deleteById(id);
     }
 }

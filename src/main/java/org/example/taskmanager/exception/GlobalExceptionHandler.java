@@ -39,4 +39,18 @@ public class GlobalExceptionHandler {
                        .status(HttpStatus.CONFLICT)
                        .body(new ApiErrorResponse(ex.getMessage(), HttpStatus.CONFLICT.value()));
     }
+    
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleUserNotFound(UserNotFoundException ex) {
+        return ResponseEntity
+                       .status(HttpStatus.NOT_FOUND)
+                       .body(new ApiErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND.value()));
+    }
+    
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<ApiErrorResponse> handleUserExists(UserAlreadyExistsException ex) {
+        return ResponseEntity
+                       .status(HttpStatus.CONFLICT)
+                       .body(new ApiErrorResponse(ex.getMessage(), HttpStatus.CONFLICT.value()));
+    }
 }
