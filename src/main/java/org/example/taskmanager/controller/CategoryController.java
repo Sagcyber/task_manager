@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.taskmanager.dto.CategoryRequestDto;
 import org.example.taskmanager.dto.CategoryResponseDto;
 import org.example.taskmanager.service.CategoryService;
-import org.example.taskmanager.service.impl.CategoryServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

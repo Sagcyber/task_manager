@@ -40,9 +40,9 @@ public class CategoryServiceImpl implements CategoryService {
         
         Category category = categoryMapper.toEntity(dto);
         
-        log.info("Category created successfully with id={}", category.getId());
-        
-        return categoryMapper.toDto(categoryRepository.save(category));
+        Category saved = categoryRepository.save(category);
+        log.info("Category created successfully with id={}", saved.getId());
+        return categoryMapper.toDto(saved);
     }
     
     @Override

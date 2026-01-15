@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.taskmanager.dto.UserRequestDto;
 import org.example.taskmanager.dto.UserResponseDto;
 import org.example.taskmanager.service.UserService;
-import org.example.taskmanager.service.impl.UserServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
