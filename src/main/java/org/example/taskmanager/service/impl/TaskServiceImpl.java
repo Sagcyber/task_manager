@@ -5,6 +5,8 @@ import org.example.taskmanager.dto.TaskRequestDto;
 import org.example.taskmanager.dto.TaskResponseDto;
 import org.example.taskmanager.exception.CategoryNotFoundException;
 import org.example.taskmanager.exception.TaskNotFoundException;
+import org.example.taskmanager.kafka.TaskCreatedEvent;
+import org.example.taskmanager.kafka.TaskEventProducer;
 import org.example.taskmanager.mapper.TaskMapper;
 import org.example.taskmanager.model.Category;
 import org.example.taskmanager.model.Task;
@@ -15,6 +17,7 @@ import org.example.taskmanager.service.TaskService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -25,13 +28,16 @@ public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final CategoryRepository categoryRepository;
     private final TaskMapper taskMapper;
+    private final TaskEventProducer taskEventProducer;
     
     public TaskServiceImpl(TaskRepository taskRepository,
                            CategoryRepository categoryRepository,
-                           TaskMapper taskMapper) {
+                           TaskMapper taskMapper,
+                           TaskEventProducer taskEventProducer) {
         this.taskRepository = taskRepository;
         this.categoryRepository = categoryRepository;
         this.taskMapper = taskMapper;
+        this.taskEventProducer = taskEventProducer;
     }
     
     @Override
@@ -47,6 +53,7 @@ public class TaskServiceImpl implements TaskService {
     @Cacheable(value = "taskById", key = "#id")
     public TaskResponseDto getTaskById(Long id) {
         log.info("Fetching task from DB, id={}", id);
+        
         Task task = taskRepository.findById(id)
                                   .orElseThrow(() -> new TaskNotFoundException(id));
         
@@ -71,6 +78,7 @@ public class TaskServiceImpl implements TaskService {
     }
     
     @Override
+    @Transactional
     @CacheEvict(value = {"tasks", "tasksByStatus", "taskById"}, allEntries = true)
     public TaskResponseDto addTask(TaskRequestDto dto) {
         log.info("Creating task: name={}, category={}",
@@ -83,12 +91,21 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskMapper.toEntity(dto, category);
         Task savedTask = taskRepository.save(task);
         
+        taskEventProducer.sendTaskCreated(
+                new TaskCreatedEvent(
+                        savedTask.getId(),
+                        savedTask.getTaskName(),
+                        savedTask.getCategory().getName()
+                )
+        );
+        
         log.info("Task created successfully with id={}", savedTask.getId());
         
         return taskMapper.toDto(savedTask);
     }
     
     @Override
+    @Transactional
     @CacheEvict(value = {"tasks", "tasksByStatus", "taskById"}, allEntries = true)
     public TaskResponseDto updateTask(Long id, TaskRequestDto dto) {
         Task task = taskRepository.findById(id)
@@ -105,6 +122,8 @@ public class TaskServiceImpl implements TaskService {
         return taskMapper.toDto(taskRepository.save(task));
     }
     
+    @Override
+    @Transactional
     @CacheEvict(value = {"tasks", "tasksByStatus", "taskById"}, allEntries = true)
     public void deleteTask(Long id) {
         log.info("Deleting task with id={}", id);
